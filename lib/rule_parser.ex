@@ -1,8 +1,21 @@
 defmodule RuleParser do
   @moduledoc """
-  Documentation for Parser.
+  Parser for the expressions used as rules.
   """
 
+  @doc ~S"""
+  Parse an expression that is used in delegation ops.
+
+    iex> RuleParser.parse_delegation_op("itx.value < 100 and itx.to != \"abcd\" and itx.assets == []")
+    {:ok,[expr: [:value, :<, 100, :and, {:expr, [:to, :!=, {:v, "abcd"}, :and, :assets, :==, {:v, []}]}]], "", %{}, {1, 0}, 57}
+
+    iex> RuleParser.parse_delegation_op("state.total_txs < 100 and state.total_tokens < 1000000")
+    {:ok, [expr: [:total_txs, :<, 100, :and, :total_tokens, :<, 1000000]], "", %{}, {1, 0}, 54}
+
+    iex> r = RuleParser.parse_delegation_op("System.halt(1)")
+    iex> elem(r, 0)
+    :error
+  """
   defdelegate parse_delegation_op(s), to: RuleParser.DelegationOp, as: :parse
 
   # below definitions are for testing purpose only.
