@@ -1,3 +1,7 @@
+## 0.2.0 (July 28, 2019)
+- allow +/-/* operation
+
+
 ## 0.1.2 (July 28, 2019)
 - fix bug that caused by operator order
 

@@ -12,6 +12,9 @@ defmodule RuleParser do
     iex> RuleParser.parse_delegation_op("state.total_txs < 100 and state.total_tokens < 1000000")
     {:ok, [expr: [:total_txs, :<, 100, :and, :total_tokens, :<, 1000000]], "", %{}, {1, 0}, 54}
 
+    iex> RuleParser.parse_delegation_op("state.balance + itx.value < 10")
+    {:ok, [:balance, :+, :value, :<, 10], "", %{}, {1, 0}, 30}
+
     iex> r = RuleParser.parse_delegation_op("System.halt(1)")
     iex> elem(r, 0)
     :error

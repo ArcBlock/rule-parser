@@ -10,18 +10,21 @@ defmodule RuleParser.Gen do
   # list_value := [ single_value | single_value , single_value ]
   # value := single_value | list_value
 
+  # op0 := + | - | *
   # op1 := == | != | in | not in
   # op2 := < | <= | > | >=
   # op3 := and | or
 
   # cond1 := ( tag op1 value )
   # cond2 := ( tag op2 integer )
+  # cond3 := ( tag op0 tag op2 integer)
 
-  # sub_expr := ( cond1 | cond2 )
+  # sub_expr := ( cond1 | cond2 | cond3)
   # expr := sub_expr op3 expr | sub_expr
 
   defmacro create(
              prefix,
+             op0 \\ ["+", "-", "*"],
              op1 \\ ["==", "!=", "in", "not in"],
              op2 \\ ["<=", "<", ">=", ">"],
              op3 \\ ["and", "or"]
@@ -56,6 +59,7 @@ defmodule RuleParser.Gen do
         |> reduce({Enum, :uniq, []})
 
       value = choice([single_value, list_value]) |> unwrap_and_tag(:v)
+      op0 = parse_ops(unquote(op0)) |> reduce({:parser_result_to_atom, []})
       op1 = parse_ops(unquote(op1)) |> reduce({:parser_result_to_atom, []})
       op2 = parse_ops(unquote(op2)) |> reduce({:parser_result_to_atom, []})
       op3 = parse_ops(unquote(op3)) |> reduce({:parser_result_to_atom, []})
@@ -70,7 +74,18 @@ defmodule RuleParser.Gen do
         |> concat(ignore_space())
         |> concat(parse_integer())
 
-      sub_expr = ignore_bracket(?\(, choice([cond1, cond2]), ?\))
+      cond3 =
+        tag
+        |> concat(ignore_space())
+        |> concat(op0)
+        |> concat(ignore_space())
+        |> concat(tag)
+        |> concat(ignore_space())
+        |> concat(op2)
+        |> concat(ignore_space())
+        |> concat(parse_integer())
+
+      sub_expr = ignore_bracket(?\(, choice([cond1, cond2, cond3]), ?\))
 
       defcombinatorp(
         :expr,
