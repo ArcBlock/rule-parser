@@ -1,3 +1,6 @@
+## 0.1.2 (July 28, 2019)
+- fix bug that caused by operator order
+
 ## 0.1.1 (July 24, 2019)
 
 - add more tests

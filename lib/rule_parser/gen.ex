@@ -23,7 +23,7 @@ defmodule RuleParser.Gen do
   defmacro create(
              prefix,
              op1 \\ ["==", "!=", "in", "not in"],
-             op2 \\ ["<", "<=", ">", ">="],
+             op2 \\ ["<=", "<", ">=", ">"],
              op3 \\ ["and", "or"]
            ) do
     quote do
