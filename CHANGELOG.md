@@ -1,3 +1,6 @@
+## 0.2.1 (November 01, 2019)
+- allow one level of nested data
+
 ## 0.2.0 (July 28, 2019)
 - allow +/-/* operation
 

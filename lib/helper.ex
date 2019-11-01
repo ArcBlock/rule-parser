@@ -67,6 +67,8 @@ defmodule RuleParser.Helper do
   def parse_tag(range \\ [?a..?z, ?_]) do
     ascii_string([?a..?z], max: 1)
     |> optional(ascii_string(range, min: 1))
+    |> optional(ascii_string([?.], max: 1))
+    |> optional(ascii_string(range, min: 1))
     |> reduce({:parser_result_to_string, []})
   end
 
@@ -120,7 +122,7 @@ defmodule RuleParser.Helper do
   def parser_result_not_quote(_, context, _, _, _), do: {:cont, context}
 
   def parser_result_to_string([start]), do: start
-  def parser_result_to_string([start, rest]), do: start <> rest
+  def parser_result_to_string(v) when is_list(v), do: Enum.join(v)
   def parser_result_to_atom([v]), do: String.to_atom(v)
 
   # private function
