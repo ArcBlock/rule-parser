@@ -72,6 +72,13 @@ defmodule RuleParser do
 
     iex> RuleParser.parse_expr(~S(a in ["hello", :world, 2]))
     {:ok, [:a, :in, {:v, ["hello", :world, 2]}], "", %{}, {1, 0}, 25}
+
+    iex> RuleParser.parse_expr("a.b.c.d != 1")
+    {:ok, [:"a.b.c.d", :!=, {:v, 1}], "", %{}, {1, 0}, 12}
+
+    iex> result = RuleParser.parse_expr("a.b.c.d.e != 1")
+    iex> elem(result, 0)
+    :error
   """
   defdelegate parse_expr(s), to: RuleParser.Common
 

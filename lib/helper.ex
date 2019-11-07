@@ -4,6 +4,8 @@ defmodule RuleParser.Helper do
   """
   import NimbleParsec
 
+  @max_nested 3
+
   @doc """
   Ignore white space and tab, and make it optional
   """
@@ -65,11 +67,19 @@ defmodule RuleParser.Helper do
   """
   @spec parse_tag(list()) :: NimbleParsec.t()
   def parse_tag(range \\ [?a..?z, ?_]) do
-    ascii_string([?a..?z], max: 1)
-    |> optional(ascii_string(range, min: 1))
-    |> optional(ascii_string([?.], max: 1))
-    |> optional(ascii_string(range, min: 1))
-    |> reduce({:parser_result_to_string, []})
+    p =
+      ascii_string([?a..?z], max: 1)
+      |> optional(ascii_string(range, min: 1))
+
+    result =
+      Enum.reduce(1..@max_nested, p, fn _, acc ->
+        acc
+        |> optional(ascii_string([?.], max: 1))
+        |> ascii_string([?a..?z], max: 1)
+        |> optional(ascii_string(range, min: 1))
+      end)
+
+    result |> reduce({:parser_result_to_string, []})
   end
 
   @doc """

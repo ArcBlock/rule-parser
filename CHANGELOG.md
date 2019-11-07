@@ -1,3 +1,6 @@
+## 0.3.0 (November 06, 2019)
+- allow predefined level of nested data
+
 ## 0.2.1 (November 01, 2019)
 - allow one level of nested data
 
