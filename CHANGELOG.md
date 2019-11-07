@@ -1,3 +1,6 @@
+## 0.3.1 (November 06, 2019)
+- prefix shall not be optional
+
 ## 0.3.0 (November 06, 2019)
 - allow predefined level of nested data
 

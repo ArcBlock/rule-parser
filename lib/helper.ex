@@ -54,7 +54,7 @@ defmodule RuleParser.Helper do
   def ignore_prefix([]), do: empty()
 
   def ignore_prefix(names),
-    do: optional(ignore(choice(Enum.map(names, &string(&1)))) |> concat(ignore_sep(".")))
+    do: ignore(choice(Enum.map(names, &string(&1)))) |> concat(ignore_sep("."))
 
   @doc """
   parse white space or tab

@@ -15,9 +15,13 @@ defmodule RuleParser do
     iex> RuleParser.parse_delegation_op("state.balance + itx.value < 10")
     {:ok, [:balance, :+, :value, :<, 10], "", %{}, {1, 0}, 30}
 
-    iex> r = RuleParser.parse_delegation_op("System.halt(1)")
+    iex> r = RuleParser.parse_delegation_op("value.header.height > 1 and value.byzantine_validators == []")
     iex> elem(r, 0)
     :error
+
+    iex> RuleParser.parse_delegation_op("state.balance + itx.value < 10")
+    {:ok, [:balance, :+, :value, :<, 10], "", %{}, {1, 0}, 30}
+
   """
   defdelegate parse_delegation_op(s), to: RuleParser.DelegationOp, as: :parse
 
